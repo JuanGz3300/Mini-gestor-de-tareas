@@ -193,7 +193,7 @@
 
                         Swal.fire({
                             title: 'Excelente trabajo, sigue asi tu puedes',
-                            text: 'Has completado una tarea, qeui tienes un gran consejo: "'+consejo+'"',
+                            text: 'Has completado una tarea, aqui tienes un gran consejo: "'+consejo+'"',
                             icon: 'success',
                             confirmButtonText: 'Super!'
                         }).then((result) =>{
