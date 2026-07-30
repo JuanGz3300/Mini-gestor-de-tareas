@@ -18,5 +18,50 @@
 
 </head>
 <body>
+    <div class="container py-5">
+        <div class="row">
+            <div class="cols-12 col-md-8">
+
+                <!--Titulo Principal-->
+
+                <div class="text-center">
+                    <h2 class="fw-bold text-primary"><i class="fa-solid fa-list-check me-2"></i>Mini Gestor de Tareas Inteligente</h2>
+                    <p class="text-muted">Organiza tus pendientes y recibe un consejo al completarlos</p>
+                </div>
+
+                <!-- Formulario para agregar tarea -->
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <form action="" method="POST" class="row g-3">
+                            <div class="col-md-9">
+                                <input type="text" name="titulo_tarea" class="form-control" placeholder="¿Que tarea tienes pendiente hoy?" required>
+                            </div>
+                            <div class="col-md-9">
+                                <button type="submit" name="agregar_tarea" class="btn btn-primary w-100">
+                                    <i class="fa-solid fa-plus me-1"></i> Agregar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+
+                <!-- Lista de Tareas -->
+
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0 text-secondary"><i class="fa-solid fa-tasks me-2"></i>Mis Tareas</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info mb-0" role="alert">
+                            <i class="fa-solid fa-circle-info me-1"></i> Aun no hay tareas registradas. ¡Agrega una arriba!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
