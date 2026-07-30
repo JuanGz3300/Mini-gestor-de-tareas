@@ -170,5 +170,44 @@
             </div>
         </div>
     </div>
+
+    <!-- script final para integrar la API de Advice Slip -->
+
+    <script>
+        $(document).ready(function(){
+            //Interceptamos el click de los botones completado
+            $('.btn-outline-success').on('click', function(e){
+            //
+            e.preventDefault();
+            const urlAccion = $(this).attr('href');
+
+            //consultamos la Api publica de Advice Slip
+                $.ajax({
+                    url: 'https://api.adviceslip.com/advice',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(response){
+                        let consejo = response.slip.advice;
+
+                        //Mostramos la alerta incluyendo el consejo de la API
+
+                        Swal.fire({
+                            title: 'Excelente trabajo, sigue asi tu puedes',
+                            text: 'Has completado una tarea, qeui tienes un gran consejo: "'+consejo+'"',
+                            icon: 'success',
+                            confirmButtonText: 'Super!'
+                        }).then((result) =>{
+                            //Cerramos la alerta y redirigimos a PHP actualizando el estado del json
+                            window.location.href = urlAccion;
+                        });
+                    },
+                    error: function(){
+                        //Si falla la API completamos de igual manera la tareas sin bloquear a el usuario
+                        window.location.href = urlAccion;
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
