@@ -40,6 +40,40 @@
     }
 //Lista actual de tareas    
     $tarea = obtTareas($archivo_json);
+
+//Eliminar tarea
+    if(isset($_GET['eliminar'])){
+        $id_eli = $_GET['eliminar'];
+        $tareas_actuales = obtTareas($archivo_json);
+        
+        //Filtramos tarea por ID desde el array
+        $tareas_actuales = array_values(array_filter($tareas_actuales, function($t) use ($id_eli){
+            return $t['id'] != $id_eli;
+        }));
+        
+
+        guaTareas($archivo_json, $tareas_actuales);
+        header("Location: index.php");
+        exit();
+    }
+
+//Cambiamos estados a completada
+
+    if(isset($_GET['completar'])){
+        $id_comp = $_GET['completar'];
+        $tareas_actuales = obtTareas($archivo_json);
+
+        foreach($tareas_actuales as &$t){
+            if($t['id'] == $id_comp){
+                $t['completada'] = !$t['completada'];
+            }
+        }
+        unset($t);
+
+        guaTareas($archivo_json, $tareas_actuales);
+        header("Location: index.php");
+        exit();
+    }
 ?>
 
 
@@ -104,11 +138,29 @@
                                 <i class="fa-solid fa-circle-info me-1"></i> Aun no hay tareas registradas. ¡Agrega una arriba!
                             </div>
                         <?php else: ?>
+                            <!-- Actualizamos seccion de la lista segun cambios que haga el usuario -->
                             <ul class="list-group">
                                 <?php foreach ($tarea as $t): ?>
                                     <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                                        <span><?php echo $t['titulo']; ?></span>
-                                        <span class="badge bg-secondary">Pendiente</span>
+                                        <span class="<?php echo $t['completada'] ? 'text-decoration-line-through text-muted' : ''; ?>">
+                                            <?php echo $t['titulo']; ?>
+                                        </span>
+                                        <div>
+                                            <?php if ($t['completada']): ?>
+                                                <span class="badge bg-success me-2">Completada</span>
+                                                <a href="index.php?completar=<?php echo $t['id']; ?>" class="btn btn-sm btn-outline-secondary" title="Marcar pendiente">
+                                                    <i class="fa-solid fa-rotate-left"></i>
+                                                </a>
+                                            <?php else: ?>
+                                                <span class="badge bg-secondary me-2">Pendiente</span>
+                                                <a href="index.php?completar=<?php echo $t['id']; ?>" class="btn btn-sm btn-outline-success" title="Completar">
+                                                    <i class="fa-solid fa-check"></i>
+                                                </a>
+                                            <?php endif; ?>
+                                            <a href="index.php?eliminar=<?php echo $t['id']; ?>" class="btn btn-sm btn-outline-danger ms-1" title="Eliminar">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </div>
                                     </li>
                                 <?php endforeach; ?>
                             </ul>
