@@ -1,3 +1,48 @@
+<?php
+//Archivo para guardar tareas
+    $archivo_json = 'tareas.json';
+
+//Funcion para leer tareas
+    function obtTareas($archivo){
+        if(!file_exists($archivo)){
+            return [];
+        }
+        $cont = file_get_contents($archivo);
+        return json_decode($cont, true) ?: [];
+    }
+
+//Funcion para guardar tareas
+
+    function guaTareas($archivo, $tarea){
+        file_put_contents($archivo, json_encode($tarea, JSON_PRETTY_PRINT));
+    }
+
+//Proceso para reconocer cuando envian formulario y guardar tareas
+
+    if (isset($_POST['agregar_tarea'])){
+        $titu = trim($_POST['titulo_tarea']);
+        if (!empty($titu)){
+            $tarea = obtTareas($archivo_json);
+
+            $nueva_tarea = [
+                'id' => time(),
+                'titulo' => htmlspecialchars($titu),
+                'completada' => false
+            ];
+
+            //Inicio de array
+            array_unshift($tarea, $nueva_tarea);
+            guaTareas($archivo_json, $tarea);
+
+            header("Location: index.php");
+            exit();
+        }
+    }
+//Lista actual de tareas    
+    $tarea = obtTareas($archivo_json);
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,7 +65,7 @@
 <body>
     <div class="container py-5">
         <div class="row">
-            <div class="cols-12 col-md-8">
+            <div class="col-12 col-md-8">
 
                 <!--Titulo Principal-->
 
@@ -46,18 +91,28 @@
                     </div>
                 </div>
 
-
-
                 <!-- Lista de Tareas -->
+                <!-- Conectamos frontend con backend para funciones por medio de php --> 
 
                 <div class="card shadow-sm">
                     <div class="card-header bg-white py-3">
                         <h5 class="mb-0 text-secondary"><i class="fa-solid fa-tasks me-2"></i>Mis Tareas</h5>
                     </div>
                     <div class="card-body">
-                        <div class="alert alert-info mb-0" role="alert">
-                            <i class="fa-solid fa-circle-info me-1"></i> Aun no hay tareas registradas. ¡Agrega una arriba!
-                        </div>
+                        <?php if (empty($tarea)): ?>
+                            <div class="alert alert-info mb-0" role="alert">
+                                <i class="fa-solid fa-circle-info me-1"></i> Aun no hay tareas registradas. ¡Agrega una arriba!
+                            </div>
+                        <?php else: ?>
+                            <ul class="list-group">
+                                <?php foreach ($tarea as $t): ?>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                        <span><?php echo $t['titulo']; ?></span>
+                                        <span class="badge bg-secondary">Pendiente</span>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
